@@ -38,25 +38,31 @@ object Lab4 extends jsy.util.JsyApplication with Lab4Like {
   /* Lists */
   
   def compressRec[A](l: List[A]): List[A] = l match {
-    case Nil | _ :: Nil => ???
-    case h1 :: (t1 @ (h2 :: _)) => ???
+    case Nil | _ :: Nil => l
+    case h1 :: (t1 @ (h2 :: _)) => if(h1 == h2) compressRec(t1) else h1 :: compressRec(t1)
   }
   
   def compressFold[A](l: List[A]): List[A] = l.foldRight(Nil: List[A]){
-    (h, acc) => ???
+    (h, acc) => (h, acc) match {
+      case (h1, Nil) => h1 :: Nil
+      case (h1,t1 @ (h2 :: _)) => if(h1 == h2) t1 else h1 :: t1
+    }
   }
   
   def mapFirst[A](l: List[A])(f: A => Option[A]): List[A] = l match {
-    case Nil => ???
-    case h :: t => ???
+    case Nil => Nil
+    case h :: t => f(h) match {
+      case None => h :: mapFirst(t)(f)
+      case Some(thing) => thing :: t
+    }
   }
   
   /* Trees */
 
   def foldLeft[A](t: Tree)(z: A)(f: (A, Int) => A): A = {
     def loop(acc: A, t: Tree): A = t match {
-      case Empty => ???
-      case Node(l, d, r) => ???
+      case Empty => acc
+      case Node(l, d, r) => f(loop(loop(acc,l),r),d)
     }
     loop(z, t)
   }
@@ -71,7 +77,12 @@ object Lab4 extends jsy.util.JsyApplication with Lab4Like {
 
   def strictlyOrdered(t: Tree): Boolean = {
     val (b, _) = foldLeft(t)((true, None: Option[Int])){
-      ???
+      (acc:(Boolean , Option[Int]),c: Int) => (acc,c) match {
+        case((true,None),c) => (true,Some(c))
+          case((b,Some(i)),c) => if(c < i) {
+            (true,Some(c))
+          }else(false,Some(i))
+      }
     }
     b
   }

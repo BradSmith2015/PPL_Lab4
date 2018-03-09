@@ -10,6 +10,7 @@ class Lab4Spec(lab4: Lab4Like) extends FlatSpec {
 
   /***** Higher-Function Exercises Tests *****/
 
+
   "compressRec/compressFold" should "compress List(1, 2, 2, 3, 3, 3)" in {
     val l1 = List(1, 2, 2, 3, 3, 3)
     val gold1 = List(1, 2, 3)
