@@ -1,0 +1,2 @@
+const n = 1;
+function (x: number, y: number, z: bool) { return z ? x + y : x - y } (4, n,true)
